@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:pursue/mobile_screens/auth/sign_up_with_emailandpass.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
