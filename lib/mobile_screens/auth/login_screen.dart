@@ -1,5 +1,3 @@
-// ignore_for_file: prefer__ructors, prefer__literals_to_create_immutables, prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,11 +23,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final Uri url = Uri.parse('https://flutter.dev');
+  bool _isLoading = false;
 
   Future openLink() async {
     const url = 'https://pursueit.in/privacypolicy/';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+    if (await canLaunch(url)) {
+      await launch(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -38,99 +37,109 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.only(top: 90),
-        child: Center(
-          child: Column(
-            children: [
-              CommonLogo(
-                logoWidth: 130,
-                logoHeight: 80,
-              ),
-              Spacer(),
-              Container(
-                height: 307,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(35),
-                    topRight: Radius.circular(35),
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.only(top: 90),
+            child: Center(
+              child: Column(
+                children: [
+                  CommonLogo(
+                    logoWidth: 130,
+                    logoHeight: 80,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 1,
+                  Spacer(),
+                  Container(
+                    height: 307,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(35),
+                        topRight: Radius.circular(35),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          blurRadius: 1,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 30),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 30,
-                      ),
-                      InkWell(
-                        onTap: signInWithGoogle,
-                        child: buildIconContent(
-                          iconPath: "assets/images/google_logo.svg",
-                          text: "Continue with Google",
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      InkWell(
-                        onTap: () {
-                          Get.to(() => SignUpWithEmailPass());
-                        },
-                        child: buildIconContent(
-                          iconPath: "assets/images/mail_logo.svg",
-                          text: "Sign up with email",
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      InkWell(
-                        onTap: () {
-                          openLink();
-                        },
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: "By creating an account, you agree with our ",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: "Terms and Conditions",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  // decoration: TextDecoration.underline,
-                                ),
-                              ),
-                              TextSpan(text: " & "),
-                              TextSpan(
-                                text: "Privacy Policy",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ],
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 20, right: 20, top: 30),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 30,
                           ),
-                        ),
+                          if (_isLoading)
+                            Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          else
+                            InkWell(
+                              onTap: signInWithGoogle,
+                              child: buildIconContent(
+                                iconPath: "assets/images/google_logo.svg",
+                                text: "Continue with Google",
+                              ),
+                            ),
+                          SizedBox(height: 15),
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => SignUpWithEmailPass());
+                            },
+                            child: buildIconContent(
+                              iconPath: "assets/images/mail_logo.svg",
+                              text: "Sign up with email",
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          InkWell(
+                            onTap: () {
+                              openLink();
+                            },
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text:
+                                    "By creating an account, you agree with our ",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "Terms and Conditions",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      // decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                  TextSpan(text: " & "),
+                                  TextSpan(
+                                    text: "Privacy Policy",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                        ],
                       ),
-                      SizedBox(height: 30),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -168,6 +177,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> signInWithGoogle() async {
     try {
+      setState(() {
+        _isLoading = true; // Show CPI while signing in
+      });
+
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser != null) {
         final GoogleSignInAuthentication googleAuth =
@@ -200,8 +213,13 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e) {
-      AppToast().toastMessage("Error signing in with Google! please try after some time or try signing up");
+      AppToast().toastMessage(
+          "Error signing in with Google! please try after some time or try signing up");
       debugPrint('Error signing in with Google: $e');
+    } finally {
+      setState(() {
+        _isLoading = false; // Hide CPI when sign-in process is complete
+      });
     }
   }
 
@@ -211,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Map<String, dynamic> userData = {
       'UserID': id,
       'OrderID': "__",
-      'CustomerID': "CID$id",   
+      'CustomerID': "CID$id",
       'Name': name,
       'Email': email,
       'PhoneNumber': 0,

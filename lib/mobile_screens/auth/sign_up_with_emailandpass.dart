@@ -1,4 +1,4 @@
-// ignore_for_file: prefer__ructors, prefer__literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
 
@@ -12,7 +12,7 @@ import 'package:pursue/common_widgets/apptoast.dart';
 import 'package:pursue/common_widgets/common_logo.dart';
 import 'package:pursue/common_widgets/rounded_btn.dart';
 import 'package:pursue/mobile_screens/chat/chat_screen1.dart';
-import 'sign_in_with_email_and_pass.dart';
+import 'package:pursue/mobile_screens/auth/sign_in_with_email_and_pass.dart';
 import 'package:http/http.dart' as http;
 
 class SignUpButton extends StatefulWidget {
@@ -32,7 +32,7 @@ class _SignUpButtonState extends State<SignUpButton> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? CircularProgressIndicator() 
+        ? CircularProgressIndicator()
         : RoundedButton(
             title: widget.title,
             onTap: () async {
@@ -61,6 +61,8 @@ class _SignUpWithEmailPassState extends State<SignUpWithEmailPass> {
   TextEditingController passController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+
+  bool _isLoading = false;
 
   bool passwordConfirmed() {
     if (passController.text.trim() == confirmPassController.text.trim()) {
@@ -235,6 +237,10 @@ class _SignUpWithEmailPassState extends State<SignUpWithEmailPass> {
 
   Future<void> signUpWithEmailAndPassword() async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
+
       final UserCredential userCredential =
           await auth.createUserWithEmailAndPassword(
         email: emailController.text,
@@ -242,35 +248,31 @@ class _SignUpWithEmailPassState extends State<SignUpWithEmailPass> {
       );
       await userCredential.user?.sendEmailVerification();
       var id = DateTime.now().millisecondsSinceEpoch.toString();
-      createUser(
+      await createUser(
           id, nameController.text.toString(), emailController.text.toString());
 
-      // if (isUserCreated == true) {
       Get.to(() => ChatScreen1());
-      // }
       AppToast().toastMessage('Successfully Created Account!');
 
-      // Signed in
       final User? user = userCredential.user;
       if (user != null) {
         debugPrint('User signed in: ${user.email}');
-        // Navigate to the next screen or perform necessary actions after sign-in
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        // Weak password
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        // Email already in use
         print('The account already exists for that email.');
       } else {
-        // Other errors
         print('Error creating user: ${e.message}');
       }
     } catch (e) {
       AppToast().toastMessage(e.toString());
       debugPrint('Failed to sign in: $e');
-      // Handle sign-in failure, e.g., show an error message
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -303,22 +305,16 @@ class _SignUpWithEmailPassState extends State<SignUpWithEmailPass> {
         body: requestBody,
       );
 
-      // Check if the request was successful (status code 200)
       if (response.statusCode == 200) {
-        // Handle success
         print('User created successfully');
-
-        // Store the user data in Firestore with the UID as the document ID
         await FirebaseFirestore.instance
             .collection('Users')
             .doc(uid)
             .set(userData);
       } else {
-        // Handle error
         print('Failed to create user. Status code: ${response.statusCode}');
       }
     } catch (error) {
-      // Handle network errors
       print('Error creating user: $error');
     }
   }

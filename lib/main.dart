@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:pursue/mobile_screens/introsplash/splash_screen.dart';
 import 'package:hypersdkflutter/hypersdkflutter.dart';
@@ -11,7 +10,9 @@ void main() async {
   final hyperSDK = HyperSDK();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp(hyperSDK: hyperSDK,));
+  runApp(MyApp(
+    hyperSDK: hyperSDK,
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -23,11 +24,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-    
-
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Pursue',
