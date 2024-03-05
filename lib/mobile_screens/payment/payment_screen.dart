@@ -16,14 +16,13 @@ import 'package:pursue/mobile_screens/shopping/career_result.dart';
 class PaymentScreen extends StatefulWidget {
   final HyperSDK hyperSDK;
   final String amount;
-  PaymentScreen({super.key,required this.hyperSDK, required this.amount });
+  PaymentScreen({super.key, required this.hyperSDK, required this.amount});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState(amount);
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-
   var showLoader = true;
   var processCalled = false;
   var paymentSuccess = false;
@@ -34,35 +33,38 @@ class _PaymentScreenState extends State<PaymentScreen> {
   bool isUserPaid = false;
 
   List<String> resTappedOptions = tappedOptions;
-  
+
   _PaymentScreenState(amount) {
     this.amount = amount;
   }
 
   Future<void> savePaymentDetails() async {
     var paymentDetails = PaymentDetails(
-      userName: userName, 
-      customerID: customerID, 
-      orderID: orderId, 
-      userEmail: userEmail, 
-      timestamp: DateTime.now(),
-      tappedOptions: resTappedOptions,
-      careerSuggesed: careerSuggesed,
-      isUserPaid: isUserPaid
-    );
+        userName: userName,
+        customerID: customerID,
+        orderID: orderId,
+        userEmail: userEmail,
+        timestamp: DateTime.now(),
+        tappedOptions: resTappedOptions,
+        careerSuggesed: careerSuggesed,
+        isUserPaid: isUserPaid);
 
     try {
       await FirebaseFirestore.instance
           .collection('payment_details')
           .add(paymentDetails.toMap());
-          print("user name: $userName \n"  "user email: $userEmail \n" "customerID: $customerID \n" "orderID: $orderId \n" "time stamp: ${DateTime.now} \n" "tapped Options: $resTappedOptions");
+      print("user name: $userName \n"
+          "user email: $userEmail \n"
+          "customerID: $customerID \n"
+          "orderID: $orderId \n"
+          "time stamp: ${DateTime.now} \n"
+          "tapped Options: $resTappedOptions");
     } catch (e) {
       print("Error saving payment details: $e");
     }
   }
 
-
-   void callProcess(amount) async {
+  void callProcess(amount) async {
     processCalled = true;
     var processPayload = await makeApiCall(amount, userEmail);
 
@@ -196,47 +198,49 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-Future<Map<String, dynamic>> makeApiCall(String amount, String userEmail) async {
-  var url = Uri.parse('https://api.juspay.in/session');
+  Future<Map<String, dynamic>> makeApiCall(
+      String amount, String userEmail) async {
+    var url = Uri.parse('https://api.juspay.in/session');
 
-  var username = '64E7E748D4844698D633E0CA892934';
-  var password = '';
-  var basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    var username = '64E7E748D4844698D633E0CA892934';
+    var password = '';
+    var basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
 
-  var headers = {
-    'Authorization': basicAuth,
-    'x-merchantid': 'pursue',
-    'Content-Type': 'application/json',
-  };
+    var headers = {
+      'Authorization': basicAuth,
+      'x-merchantid': 'pursue',
+      'Content-Type': 'application/json',
+    };
 
-  var rng = Random();
-  var number = rng.nextInt(900000) + 100000;
-  customerID = "${number}p";
-  orderId = "p$number";
+    var rng = Random();
+    var number = rng.nextInt(900000) + 100000;
+    customerID = "${number}p";
+    orderId = "p$number";
 
-  var requestBody = {
-    "order_id": orderId,
-    "amount": amount,
-    "customer_id": customerID,
-    "customer_email": userEmail,
-    "customer_phone": userEmail,
-    "payment_page_client_id": "pursue",
-    "action": "paymentPage",
-    "description": "Complete your payment",
-    "first_name": userName,
-    "last_name": ""
-  };
+    var requestBody = {
+      "order_id": orderId,
+      "amount": amount,
+      "customer_id": customerID,
+      "customer_email": userEmail,
+      "customer_phone": userEmail,
+      "payment_page_client_id": "pursue",
+      "action": "paymentPage",
+      "description": "Complete your payment",
+      "first_name": userName,
+      "last_name": ""
+    };
 
-  var response =
-      await http.post(url, headers: headers, body: jsonEncode(requestBody));
+    var response =
+        await http.post(url, headers: headers, body: jsonEncode(requestBody));
 
-  if (response.statusCode == 200) {
-    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-    return jsonResponse['sdk_payload'];
-  } else {
-    throw Exception('API call failed with status code ${response.statusCode}');
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      return jsonResponse['sdk_payload'];
+    } else {
+      throw Exception(
+          'API call failed with status code ${response.statusCode}');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +252,7 @@ Future<Map<String, dynamic>> makeApiCall(String amount, String userEmail) async 
         onWillPop: () async {
           if (Platform.isAndroid) {
             var backpressResult = await widget.hyperSDK.onBackPress();
-    
+
             if (backpressResult.toLowerCase() == "true") {
               return false;
             } else {
