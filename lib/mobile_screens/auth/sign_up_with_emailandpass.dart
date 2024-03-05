@@ -12,6 +12,7 @@ import 'package:pursue/common_widgets/apptoast.dart';
 import 'package:pursue/common_widgets/common_logo.dart';
 import 'package:pursue/common_widgets/rounded_btn.dart';
 import 'package:pursue/mobile_screens/chat/chat_screen1.dart';
+import 'package:pursue/screen_controller/mixpanelEvent.dart';
 import 'sign_in_with_email_and_pass.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,7 +33,7 @@ class _SignUpButtonState extends State<SignUpButton> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? CircularProgressIndicator() 
+        ? CircularProgressIndicator()
         : RoundedButton(
             title: widget.title,
             onTap: () async {
@@ -54,6 +55,7 @@ class SignUpWithEmailPass extends StatefulWidget {
 }
 
 class _SignUpWithEmailPassState extends State<SignUpWithEmailPass> {
+  MixpanelService mixpanelService = MixpanelService();
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isUserCreated = false;
 
@@ -246,6 +248,7 @@ class _SignUpWithEmailPassState extends State<SignUpWithEmailPass> {
           id, nameController.text.toString(), emailController.text.toString());
 
       // if (isUserCreated == true) {
+      mixpanelService.sendEventToMixpanel("Signupviaemail_success", "Successfully created user account");
       Get.to(() => ChatScreen1());
       // }
       AppToast().toastMessage('Successfully Created Account!');

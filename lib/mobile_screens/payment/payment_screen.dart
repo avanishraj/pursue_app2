@@ -197,11 +197,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
 Future<Map<String, dynamic>> makeApiCall(String amount, String userEmail) async {
-  var url = Uri.parse('https://api.juspay.in/session');
+  var url = Uri.parse('https://pursueit.in:8080/user/createSession');
 
-  var username = '64E7E748D4844698D633E0CA892934';
+  var username = '811FCAD0B60436FA48E4F198FA3CA7';
   var password = '';
-  var basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
+  var basicAuth = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
 
   var headers = {
     'Authorization': basicAuth,
@@ -211,20 +211,19 @@ Future<Map<String, dynamic>> makeApiCall(String amount, String userEmail) async 
 
   var rng = Random();
   var number = rng.nextInt(900000) + 100000;
-  customerID = "${number}p";
-  orderId = "p$number";
+  var orderId = "OID$number";
 
   var requestBody = {
-    "order_id": orderId,
-    "amount": amount,
-    "customer_id": customerID,
-    "customer_email": userEmail,
-    "customer_phone": userEmail,
-    "payment_page_client_id": "pursue",
-    "action": "paymentPage",
-    "description": "Complete your payment",
-    "first_name": userName,
-    "last_name": ""
+    "OrderID": orderId,
+    "Amount": int.parse(amount),
+    "CustomerDetails": {
+      "CustomerId": "CID$number",
+      "EmailAddress": userEmail,
+      "FirstName": "John", 
+      "LastName": "Doe",   
+      "MobileNumber": 9876543210, 
+      "CountryCode": 91 
+    }
   };
 
   var response =

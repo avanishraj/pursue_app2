@@ -10,6 +10,7 @@ import 'package:pursue/common_widgets/rounded_btn.dart';
 import 'package:pursue/mobile_screens/auth/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:pursue/common_widgets/apptoast.dart';
+import 'package:pursue/screen_controller/mixpanelEvent.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -25,6 +26,7 @@ class PostPaymentScreen extends StatefulWidget {
 
 class _PostPaymentScreenState extends State<PostPaymentScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
+  MixpanelService mixpanelService = MixpanelService();
   
   String userName = "";
   String userEmail = "";
@@ -43,6 +45,7 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
   void initState() {
     super.initState();
     getUserInfo();
+    mixpanelService.sendEventToMixpanel("PaymentSuccess", "Payment is successful");
     // fetchData();
   }
 
@@ -67,7 +70,7 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
 
   Future<void> fetchData() async {
     final response = await http
-        .get(Uri.parse('http://54.160.218.173:80/admin/careerDescription'));
+        .get(Uri.parse('https://pursueit.in:8080/admin/careerDescription'));
     print(response.statusCode);
     if (response.statusCode == 200) {
       // setState(() {
@@ -117,6 +120,7 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
                 tooltip: "Logout",
                 onPressed: () async {
                   try {
+                    mixpanelService.sendEventToMixpanel("Log_outClicked", "Navigating to Login screen");
                     getUserInfo();
                     await auth.signOut();
                     Get.to(() => LoginScreen());
@@ -232,6 +236,7 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
                               isSelected: isSelectedList[index],
                               text: careerData[index]['Name'].toString(),
                               onTap: () {
+                                mixpanelService.sendEventToMixpanel("CS_CarouselClick", "Showing selected career details");
                                 setState(() {
                                   isSelectedList =
                                       List.generate(10, (i) => i == index);
@@ -522,7 +527,6 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
               child: Text("No salary data available"),
             );
           }
-
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -760,6 +764,7 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
                             height: 220,
                             child: GestureDetector(
                               onTap: () async {
+                                mixpanelService.sendEventToMixpanel("CS_CollegeClick", "${_messageTopColleges[index]['Name']}");
                                 String url = _messageTopColleges[index]
                                     ['RedirectionUrl'];
                                 if (await canLaunch(url)) {
@@ -901,7 +906,9 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
                     height: 51,
                     child: RoundedButton(
                       title: "More Skills",
-                      onTap: () {},
+                      onTap: () {
+                        mixpanelService.sendEventToMixpanel("MoreSkillsClicked", "user clicked on more skills button");
+                      },
                     )),
               ),
             ],
@@ -988,6 +995,7 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
                                       child: RoundedButton(
                                         title: "Enroll Now",
                                         onTap: () async {
+                                          mixpanelService.sendEventToMixpanel("CourseClick", "${course['Title']}");
                                           String url =
                                               course[index]['RedirectionUrl'];
                                           if (await canLaunch(url)) {
@@ -1052,6 +1060,7 @@ class _PostPaymentScreenState extends State<PostPaymentScreen> {
             ),
             child: InkWell(
               onTap: () {
+                mixpanelService.sendEventToMixpanel("ShareButtonClick", "User clicks on banner of share");
                 shareOnWhatsApp(
                     "I have Referred You to join Pursue! \n https://pursueit.in/");
               },

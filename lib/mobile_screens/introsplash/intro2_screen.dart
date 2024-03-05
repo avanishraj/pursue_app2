@@ -1,15 +1,18 @@
 // ignore_for_file: prefer__ructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pursue/common_widgets/common_logo.dart';
 import 'package:pursue/common_widgets/rounded_btn.dart';
 import 'package:pursue/mobile_screens/auth/login_screen.dart';
+import 'package:pursue/screen_controller/mixpanelEvent.dart';
 
 class Intro2Screen extends StatelessWidget {
-  const Intro2Screen({Key? key}) : super(key: key);
+  Intro2Screen({Key? key}) : super(key: key);
+  MixpanelService mixpanelService = MixpanelService();
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +102,7 @@ class Intro2Screen extends StatelessWidget {
                                       child: RoundedButton(
                                           title: "Get Started",
                                           onTap: () {
+                                            mixpanelService.sendEventToMixpanel("Intro2_NextClicked", "Routing to Login and Signup page");
                                             Get.to(() => LoginScreen());
                                           }),
                                     ),

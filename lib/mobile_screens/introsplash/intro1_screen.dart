@@ -1,4 +1,4 @@
-// ignore_for_file: prefer__ructors, prefer_const_constructors
+// ignore_for_file: prefer__ructors, prefer_const_constructors, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,9 +8,11 @@ import 'package:pursue/common_widgets/common_logo.dart';
 import 'package:pursue/common_widgets/rounded_btn.dart';
 import 'package:pursue/mobile_screens/introsplash/intro2_screen.dart';
 import 'package:pursue/mobile_screens/auth/login_screen.dart';
+import 'package:pursue/screen_controller/mixpanelEvent.dart';
 
 class Intro1Screen extends StatelessWidget {
-  const Intro1Screen({super.key});
+  Intro1Screen({super.key});
+  MixpanelService mixpanelService = MixpanelService();
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +85,7 @@ class Intro1Screen extends StatelessWidget {
                         RoundedButton(
                             title: "Next",
                             onTap: () {
+                              mixpanelService.sendEventToMixpanel("Intro1_NextClicked", "Getting into next intro screen");
                               Get.to(() => Intro2Screen());
                             }),
                         SizedBox(height: 10),
@@ -94,6 +97,7 @@ class Intro1Screen extends StatelessWidget {
                             children: [
                               TextButton(
                                 onPressed: () {
+                                  mixpanelService.sendEventToMixpanel("Intro1_SkipClicked", "routing to login screen");
                                   Get.to(() => LoginScreen());
                                 },
                                 child: Text(

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:pursue/common_widgets/common_logo.dart';
 import 'package:pursue/mobile_screens/chat/chat_screen1.dart';
 import 'package:pursue/mobile_screens/introsplash/intro1_screen.dart';
+import 'package:pursue/screen_controller/mixpanelEvent.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -16,20 +17,23 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  MixpanelService mixpanelService = MixpanelService();
   FirebaseAuth auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
-    // if (auth.currentUser != null) {
-    //   Timer(Duration(seconds: 3), () {
-    //     Get.to(() => ChatScreen1());
-    //   });
-    // } else {
+    mixpanelService.sendEventToMixpanel("App_Open", "app is opened");
+    if (auth.currentUser != null) {
+      Timer(Duration(seconds: 3), () {
+        Get.to(() => ChatScreen1());
+      });
+    } else {
       Timer(Duration(seconds: 3), () {
         Get.to(() => Intro1Screen());
       });
-    // }
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {

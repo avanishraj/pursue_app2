@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:pursue/main.dart';
 import 'package:pursue/mobile_screens/payment/post_payment_screen.dart';
 import 'package:pursue/mobile_screens/shopping/career_result.dart';
+import 'package:pursue/screen_controller/mixpanelEvent.dart';
 
 List<String> tappedOptions = [];
 String amount = "";
@@ -59,6 +60,7 @@ class ChatScreen1 extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen1> {
+  MixpanelService mixpanelService = MixpanelService();
   final ScrollController _scrollController = ScrollController();
   List<Map<String, String>> messages = [];
   List<Map<String, String>> originalMessages = [];
@@ -83,6 +85,7 @@ class _ChatScreenState extends State<ChatScreen1> {
   @override
   void initState() {
     super.initState();
+    mixpanelService.sendEventToMixpanel("Chat_start", "chat screen is opened");
     print("initState");
     fetchData();
     userInfo();

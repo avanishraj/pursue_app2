@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pursue/common_widgets/apptoast.dart';
 import 'package:pursue/mobile_screens/shopping/career_result.dart';
+import 'package:pursue/screen_controller/mixpanelEvent.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pursue/common_widgets/common_logo.dart';
@@ -24,6 +25,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  MixpanelService mixpanelService = MixpanelService();
   final Uri url = Uri.parse('https://flutter.dev');
 
   Future openLink() async {
@@ -82,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 15),
                       InkWell(
                         onTap: () {
+                          mixpanelService.sendEventToMixpanel("Login_emailsignup", "Signup or Login screen opened");
                           Get.to(() => SignUpWithEmailPass());
                         },
                         child: buildIconContent(
@@ -186,6 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
         debugPrint(name);
 
         if (userCredential.user != null) {
+          mixpanelService.sendEventToMixpanel("Login_Google", "Logged in via google");
           Get.to(() => ChatScreen1());
           AppToast().toastMessage(
               "You're Signing in with your Google Account : $email");

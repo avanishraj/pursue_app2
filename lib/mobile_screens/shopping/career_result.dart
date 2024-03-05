@@ -11,6 +11,7 @@ import 'package:pursue/common_widgets/rounded_btn.dart';
 import 'package:pursue/main.dart';
 import 'package:pursue/mobile_screens/chat/chat_screen1.dart';
 import 'package:pursue/mobile_screens/payment/payment_screen.dart';
+import 'package:pursue/screen_controller/mixpanelEvent.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -28,12 +29,14 @@ class CareerResultScreen extends StatefulWidget {
 }
 
 class _CareerResultScreenState extends State<CareerResultScreen> {
+  MixpanelService mixpanelService = MixpanelService();
 
   int careerResLen = 0;
 
  @override
   void initState() {
     super.initState();
+    mixpanelService.sendEventToMixpanel("PaymentButtonSheet_Open", "PaymentButtonSheet_Open");
     getUserInfo();
   }
 
@@ -93,7 +96,7 @@ void proceedToPaymentScreen() {
 
 Future<List<String>> fetchCareerSuggestions(List<List<String>> subOptions) async {
   List<String> careerSuggestions = [];
-  final response = await http.get(Uri.parse('http://54.160.218.173:80/admin/readRepository/Repository'));
+  final response = await http.get(Uri.parse('https://pursueit.in:8080/admin/readRepository/Repository'));
 
   if (response.statusCode == 200) {
 
@@ -247,6 +250,7 @@ void main() async {
                     RoundedButton(
                         title: "Grab the offer Now!",
                         onTap: () {
+                          mixpanelService.sendEventToMixpanel("BuyNow_Click", "user is directing to payment screen");
                           initiateHyperSDK();
                           CircularProgressIndicator();
                           // Get.to(() => PaymentScreen(hyperSDK: hyperSDK, amount: "50"));
