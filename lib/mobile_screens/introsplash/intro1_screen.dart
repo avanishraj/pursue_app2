@@ -1,4 +1,4 @@
-// ignore_for_file: prefer__ructors, prefer_const_constructors
+// ignore_for_file: prefer_constructors_over_static_methods, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,7 +10,7 @@ import 'package:pursue/mobile_screens/introsplash/intro2_screen.dart';
 import 'package:pursue/mobile_screens/auth/login_screen.dart';
 
 class Intro1Screen extends StatelessWidget {
-  const Intro1Screen({super.key});
+  const Intro1Screen({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,9 @@ class Intro1Screen extends StatelessWidget {
                       RoundedButton(
                         title: "Next",
                         onTap: () {
-                          Get.to(() => Intro2Screen());
+                          // Use Get.to(() => Intro2Screen()) to navigate with default transition
+                          Get.to(() => Intro2Screen(),
+                              transition: Transition.rightToLeft);
                         },
                       ),
                       SizedBox(height: 10),
