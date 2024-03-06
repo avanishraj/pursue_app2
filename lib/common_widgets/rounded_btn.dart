@@ -21,7 +21,7 @@ class RoundedButton extends StatelessWidget {
           height: 51,
           decoration: BoxDecoration(
               color: Color(0xff2F80ED),
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(15)),
           child: Center(
             child: loading
                 ? CircularProgressIndicator(
@@ -31,8 +31,8 @@ class RoundedButton extends StatelessWidget {
                 : Text(
                     title,
                     style: GoogleFonts.roboto(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
                   ),

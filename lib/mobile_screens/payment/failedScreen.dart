@@ -6,13 +6,12 @@ import 'package:pursue/mobile_screens/shopping/career_result.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FailedScreen extends StatefulWidget {
-  const FailedScreen({super.key});
+  const FailedScreen({Key? key});
 
   @override
   State<FailedScreen> createState() => _FailedScreenState();
 }
 
-//#EFEDF8
 class _FailedScreenState extends State<FailedScreen> {
   @override
   Widget build(BuildContext context) {
@@ -23,49 +22,50 @@ class _FailedScreenState extends State<FailedScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 15.0, right: 15, top: 5),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, right: 15, top: 5),
                 child: SizedBox(
                   height: 200,
                   width: 300,
                   child: Image(
-                      image: AssetImage("assets/images/failed_screen_gif.gif"),),
+                    image: AssetImage("assets/images/failed_screen_gif.gif"),
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20),
                 child: Center(
-                    child: Padding(
-                  padding:const EdgeInsets.all(10.0),
-                  child: Center(
-                      child: Text(
-                    'Oops, look like the payment failed',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.raleway(
-                      fontSize: 25, fontWeight: FontWeight.w800
-                    )
-                  )),
-                ),),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Center(
+                        child: Text(
+                      'Oops, look like the payment failed',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.raleway(
+                          fontSize: 25, fontWeight: FontWeight.w800),
+                    )),
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 20.0, right: 20),
                 child: Center(
-                    child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Center(
-                      child: Text(
-                    'You can retry the payment below to continue this.',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.raleway(
-                      color: Colors.blueGrey,
-                      fontSize: 20, fontWeight: FontWeight.w500
-                    )
-                  )),
-                )),
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Center(
+                        child: Text(
+                      'You can retry the payment below to continue this.',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.raleway(
+                          color: Colors.blueGrey,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    )),
+                  ),
+                ),
               ),
             ]),
-            //#EF785E
             SizedBox(height: 20),
             Column(
               children: [
@@ -75,15 +75,21 @@ class _FailedScreenState extends State<FailedScreen> {
                     elevation: 15,
                     color: Colors.red,
                     shadowColor: Colors.redAccent,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (_) => PaymentScreen(
-                                    hyperSDK: hyperSDK,
-                                    amount: amount,
-                                  )),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                FadeTransition(
+                              opacity: animation1,
+                              child: PaymentScreen(
+                                hyperSDK: hyperSDK,
+                                amount: amount,
+                              ),
+                            ),
+                          ),
                         );
                       },
                       child: Container(
@@ -96,7 +102,9 @@ class _FailedScreenState extends State<FailedScreen> {
                           child: Text(
                             "Retry",
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
                           ),
                         )),
                       ),
@@ -110,16 +118,23 @@ class _FailedScreenState extends State<FailedScreen> {
                     elevation: 15,
                     color: Colors.red,
                     shadowColor: Colors.redAccent,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  CareerResultScreen(hyperSDK: hyperSDK)),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                FadeTransition(
+                              opacity: animation1,
+                              child: CareerResultScreen(
+                                hyperSDK: hyperSDK,
+                              ),
+                            ),
+                          ),
                         );
                       },
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.only(left: 40.0, right: 40),
                         child: Center(
                             child: Padding(
@@ -128,7 +143,9 @@ class _FailedScreenState extends State<FailedScreen> {
                             "Go back to the chat!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
                           ),
                         )),
                       ),

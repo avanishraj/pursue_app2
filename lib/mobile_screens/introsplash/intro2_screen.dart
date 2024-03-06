@@ -1,4 +1,4 @@
-// ignore_for_file: prefer__ructors, prefer_const_constructors
+// ignore_for_file: prefer_constructors_over_static_methods, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,15 +26,15 @@ class Intro2Screen extends StatelessWidget {
                   logoWidth: 64,
                   logoHeight: 53,
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
                 SvgPicture.asset(
                   "assets/images/screen_3_person.svg",
-                  width: 296,
-                  height: 220,
+                  width: 280,
+                  height: 210,
                 ),
-                // Spacer(),
+                SizedBox(height: 60),
                 Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 12),
+                  padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                   child: Container(
                     height: 350,
                     decoration: BoxDecoration(
@@ -52,59 +52,85 @@ class Intro2Screen extends StatelessWidget {
                     ),
                     padding: EdgeInsets.only(top: 20),
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                      // scrollDirection: Axis.horizontal,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(0.0),
                         child: Center(
-                          child: Container(
+                          child: SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(left: 25),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: 15),
-                                      buildIconContent(
-                                        iconPath: "assets/icons/icon_1.svg",
-                                        text: "Answer a few questions",
-                                      ),
-                                      SizedBox(height: 15),
-                                      buildIconContent(
-                                        iconPath: "assets/icons/icon_4.svg",
-                                        text: "Get careers suggested just for you",
-                                      ),
-                                      SizedBox(height: 15),
-                                      buildIconContent(
-                                        iconPath: "assets/icons/icon_3.svg",
-                                        text: "Access top courses",
-                                      ),
-                                      SizedBox(height: 15),
-                                      buildIconContent(
-                                        iconPath: "assets/icons/icon_2.svg",
-                                        text: "Pursue your chosen career path",
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 20),
-                                    child: Container(
-                                     padding: EdgeInsets.symmetric(horizontal: 20),
-                                     height: 50,
-                                     width: double.infinity,
-                                      child: RoundedButton(
-                                          title: "Get Started",
-                                          onTap: () {
-                                            Get.to(() => LoginScreen());
-                                          }),
+                                  padding: EdgeInsets.only(left: 40, top: 20),
+                                  child: Center(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(height: 15),
+                                        buildIconContent(
+                                          iconPath: "assets/icons/icon_1.svg",
+                                          text: "Answer a few Questions",
+                                          iconSize:
+                                              24, // Adjust the size of the icon
+                                          textSize:
+                                              15, // Adjust the size of the text
+                                        ),
+                                        SizedBox(height: 15),
+                                        buildIconContent(
+                                          iconPath: "assets/icons/icon_4.svg",
+                                          text:
+                                              "Get careers suggested just for you",
+                                          iconSize:
+                                              24, // Adjust the size of the icon
+                                          textSize:
+                                              15, // Adjust the size of the text
+                                        ),
+                                        SizedBox(height: 15),
+                                        buildIconContent(
+                                          iconPath: "assets/icons/icon_3.svg",
+                                          text: "Access top courses",
+                                          iconSize:
+                                              24, // Adjust the size of the icon
+                                          textSize:
+                                              15, // Adjust the size of the text
+                                        ),
+                                        SizedBox(height: 15),
+                                        buildIconContent(
+                                          iconPath: "assets/icons/icon_2.svg",
+                                          text:
+                                              "Pursue your chosen career path",
+                                          iconSize:
+                                              24, // Adjust the size of the icon
+                                          textSize:
+                                              15, // Adjust the size of the text
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 50),
+                                Center(
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.only(left: 10, right: 10),
+                                      height: 50,
+                                      width: 400,
+                                      child: RoundedButton(
+                                          title: "Get Started",
+                                          onTap: () {
+                                            Get.to(() => LoginScreen(),
+                                                transition:
+                                                    Transition.rightToLeft);
+                                          }),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 45),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -138,22 +164,29 @@ class Intro2Screen extends StatelessWidget {
     );
   }
 
-  Widget buildIconContent({required String iconPath, required String text}) {
+  Widget buildIconContent({
+    required String iconPath,
+    required String text,
+    double iconSize = 22,
+    double textSize = 18,
+  }) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SvgPicture.asset(
           iconPath,
-          width: 21.53,
-          height: 21,
+          height: iconSize,
+          width: iconSize,
         ),
-        SizedBox(width: 10),
+        SizedBox(width: 10), // Adjust spacing between icon and text
         Text(
           text,
-          style: GoogleFonts.roboto(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+          style: TextStyle(
+            fontSize: textSize,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
           ),
-        )
+        ),
       ],
     );
   }
