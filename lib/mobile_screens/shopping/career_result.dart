@@ -18,7 +18,7 @@ import 'package:http/http.dart' as http;
 
 String userName = "";
 String userEmail = "";
-List<String> careerSuggesed = [];
+List<String> careerSuggested = [];
 
 class CareerResultScreen extends StatefulWidget {
   final HyperSDK hyperSDK;
@@ -136,48 +136,48 @@ class _CareerResultScreenState extends State<CareerResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(height: 10),
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 73),
-              child: CommonLogo(
-                logoWidth: 50,
-                logoHeight: 45,
-              ),
-            ),
-          ),
-          SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.only(left: 18.0),
-            child: buildMsgContainerReceived(
-              text:
-                  "We have found 3 options which we feel would be a good fit to personal skills and interests!",
-            ),
-          ),
-          // Spacer(),
-          SizedBox(height: 46),
-          Container(
-            height: 437,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(37),
-                topRight: Radius.circular(37),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 3,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 10),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 73),
+                child: CommonLogo(
+                  logoWidth: 50,
+                  logoHeight: 45,
                 ),
-              ],
+              ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 26),
-              child: SingleChildScrollView(
+            SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.only(left: 18.0),
+              child: buildMsgContainerReceived(
+                text:
+                    "We have found 3 options which we feel would be a good fit to personal skills and interests!",
+              ),
+            ),
+            // Spacer(),
+            SizedBox(height: 46),
+            Container(
+              height: 437,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(37),
+                  topRight: Radius.circular(37),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 3,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 26),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -256,19 +256,20 @@ class _CareerResultScreenState extends State<CareerResultScreen> {
                     ),
                     SizedBox(height: 20),
                     RoundedButton(
-                        title: "Grab The Offer Now!",
-                        onTap: () {
-                          initiateHyperSDK();
-                          CircularProgressIndicator();
-                          // Get.to(() => PaymentScreen(hyperSDK: hyperSDK, amount: "50"));
-                        }),
+                      title: "Grab The Offer Now!",
+                      onTap: () {
+                        initiateHyperSDK();
+                        CircularProgressIndicator();
+                        // Get.to(() => PaymentScreen(hyperSDK: hyperSDK, amount: "50"));
+                      },
+                    ),
                     const SizedBox(height: 10),
                   ],
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

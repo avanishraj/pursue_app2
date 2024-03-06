@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +17,7 @@ class SignUpButton extends StatefulWidget {
   final String title;
   final Function onTap;
 
-  const SignUpButton({super.key, required this.title, required this.onTap});
+  const SignUpButton({Key? key, required this.title, required this.onTap});
 
   @override
   _SignUpButtonState createState() => _SignUpButtonState();
@@ -187,7 +185,8 @@ class _SignUpWithEmailPassState extends State<SignUpWithEmailPass> {
                       TextSpan(
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Get.to(() => const SignInWithEmailPass());
+                            Get.to(() => const SignInWithEmailPass(),
+                                transition: Transition.rightToLeft);
                           },
                         text: 'Login ',
                         style: const TextStyle(
@@ -236,7 +235,7 @@ class _SignUpWithEmailPassState extends State<SignUpWithEmailPass> {
       await createUser(
           id, nameController.text.toString(), emailController.text.toString());
 
-      Get.to(() => ChatScreen1());
+      Get.to(() => ChatScreen1(), transition: Transition.rightToLeft);
       AppToast().toastMessage('Successfully Created Account!');
 
       final User? user = userCredential.user;

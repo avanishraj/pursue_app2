@@ -641,144 +641,67 @@ class _ChatScreenState extends State<ChatScreen1> {
     );
   }
 
-  Widget _buildTypingIndicator() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      margin: const EdgeInsets.only(top: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Row(
-        children: [
-          SizedBox(width: 10),
-          Text(
-            "Typing...",
-            style: TextStyle(fontSize: 17, letterSpacing: 5),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextComposer() {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 5),
-      margin: const EdgeInsets.symmetric(horizontal: 3.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.white,
-            blurRadius: 10,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFECECEC),
-                // border: Border.all(color: Colors.blue),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: TextField(
-                controller: _textController,
-                onSubmitted: _handleSubmitted,
-                decoration: InputDecoration(
-                  hintText: "Type a Message",
-                  hintStyle: GoogleFonts.roboto(),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 10.0),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 3,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.send, color: Colors.white),
-              onPressed: () {
-                if (_textController.text.isNotEmpty) {
-                  _handleSubmitted(_textController.text);
-                }
-              },
-            ),
-          ),
-        ],
-      ),
+  Widget _buildList() {
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 10),
+      controller: _scrollController,
+      itemCount: messages.length,
+      itemBuilder: (BuildContext context, int index) {
+        final message = messages[index];
+        final isMe = message['sender'] == "You";
+        final isBot = message['sender'] == "Bot";
+        final isOption = message['isOption'] == 'true';
+        final useAvatar = message['useAvatar'] == 'true';
+        return _buildMessage(
+          message['message']!,
+          isMe,
+          isBot,
+          isOption: isOption,
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 20),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 50.0, bottom: 70),
-                child: Column(
-                  children: [
-                    Container(
-                        height: 60,
-                        width: 60,
-                        child: Image(
-                            image: AssetImage("assets/images/pursue.png"))),
-                    const Text(
-                      "Pursue",
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2F80ED),
+        title: Text("Chat", style: GoogleFonts.raleway()),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Expanded(child: _buildList()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _textController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Type a message...",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
-                  ],
+                    onSubmitted: _handleSubmitted,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final messageData = messages[index];
-                    if (messageData['isOption'] == 'true') {
-                      return _buildOptions(messageData['message']!);
-                    } else {
-                      return _buildMessage(
-                        messageData['message']!,
-                        messageData['sender'] == 'You',
-                        messageData['isBot'] == true && isFetchingQuestions,
-                        isOption: messageData['isOption'] == 'true',
-                      );
-                    }
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+                    _handleSubmitted(_textController.text);
                   },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 20),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFFEAF2FD))),
-                ),
-              ),
-              if (isFetchingQuestions) _buildTypingIndicator(),
-              if (!isProfessionSelected && isCurrentQuestionWithOptions())
-                _buildTextComposer(),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

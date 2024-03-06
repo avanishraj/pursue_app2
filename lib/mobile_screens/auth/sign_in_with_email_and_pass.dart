@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,7 @@ class _SignInWithEmailPassState extends State<SignInWithEmailPass> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  bool _isLoading = false; // Add this line
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +156,8 @@ class _SignInWithEmailPassState extends State<SignInWithEmailPass> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Get.to(() => ForgetPassword());
+                                Get.to(() => ForgetPassword(),
+                                    transition: Transition.rightToLeft);
                               },
                           ),
                         ],
@@ -170,7 +169,7 @@ class _SignInWithEmailPassState extends State<SignInWithEmailPass> {
               ),
             ),
           ),
-          if (_isLoading) // Show CPI conditionally
+          if (_isLoading)
             Center(
               child: CircularProgressIndicator(),
             ),
@@ -182,7 +181,7 @@ class _SignInWithEmailPassState extends State<SignInWithEmailPass> {
   Future<void> signInWithEmailAndPassword() async {
     try {
       setState(() {
-        _isLoading = true; // Show CPI while signing in
+        _isLoading = true;
       });
 
       final UserCredential userCredential =
@@ -191,24 +190,22 @@ class _SignInWithEmailPassState extends State<SignInWithEmailPass> {
         password: passController.text,
       );
 
-      Get.to(() => ChatScreen1());
+      Get.to(() => ChatScreen1(),
+          transition: Transition.rightToLeft); // Adding slide transition
 
-      // Signed in
       final User? user = userCredential.user;
       if (user != null) {
         debugPrint('User signed in: ${user.email}');
         var email = user.email;
         AppToast().toastMessage("Successfully Logged In using : $email");
-        // Navigate to the next screen or perform necessary actions after sign-in
       }
     } catch (e) {
       AppToast().toastMessage(e.toString());
 
       debugPrint('Failed to sign in: $e');
-      // Handle sign-in failure, e.g., show an error message
     } finally {
       setState(() {
-        _isLoading = false; // Hide CPI when sign-in process is complete
+        _isLoading = false;
       });
     }
   }

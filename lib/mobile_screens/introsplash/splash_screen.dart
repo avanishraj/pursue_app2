@@ -17,6 +17,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
@@ -25,9 +26,9 @@ class _SplashScreenState extends State<SplashScreen> {
     //     Get.to(() => ChatScreen1());
     //   });
     // } else {
-      Timer(Duration(seconds: 3), () {
-        Get.to(() => Intro1Screen());
-      });
+    Timer(Duration(seconds: 3), () {
+      Get.to(() => Intro1Screen(), transition: Transition.rightToLeft);
+    });
     // }
   }
 

@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:pursue/mobile_screens/auth/sign_up_with_emailandpass.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -88,7 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(height: 15),
                           InkWell(
                             onTap: () {
-                              Get.to(() => SignUpWithEmailPass());
+                              Get.to(() => SignUpWithEmailPass(),
+                                  transition: Transition
+                                      .rightToLeft); // Adding slide transition
                             },
                             child: buildIconContent(
                               iconPath: "assets/images/mail_logo.svg",

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer__ructors, prefer_const_constructors
+// ignore_for_file: prefer_constructors_over_static_methods, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,7 +33,6 @@ class Intro2Screen extends StatelessWidget {
                   height: 210,
                 ),
                 SizedBox(height: 60),
-                // Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                   child: Container(
@@ -124,7 +123,9 @@ class Intro2Screen extends StatelessWidget {
                                       child: RoundedButton(
                                           title: "Get Started",
                                           onTap: () {
-                                            Get.to(() => LoginScreen());
+                                            Get.to(() => LoginScreen(),
+                                                transition:
+                                                    Transition.rightToLeft);
                                           }),
                                     ),
                                   ),

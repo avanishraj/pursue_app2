@@ -46,7 +46,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         userEmail: userEmail,
         timestamp: DateTime.now(),
         tappedOptions: resTappedOptions,
-        careerSuggesed: careerSuggesed,
+        careerSuggesed: careerSuggested,
         isUserPaid: isUserPaid);
 
     try {
