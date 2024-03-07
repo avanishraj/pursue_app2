@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,11 +66,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     var processPayload = await makeApiCall(amount, userEmail);
 
     await widget.hyperSDK.process(processPayload, hyperSDKCallbackHandler);
-    // block:end:process-sdk
   }
 
-  // Define handler for callbacks from hyperSDK
-  // block:start:callback-handler
   void hyperSDKCallbackHandler(MethodCall methodCall) {
     switch (methodCall.method) {
       case "hide_loader":
