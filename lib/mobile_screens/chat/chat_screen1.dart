@@ -12,15 +12,15 @@ import 'package:pursue/screen_controller/mixpanelEvent.dart';
 List<String> tappedOptions = [];
 String amount = "";
 String userId = '';
-  String orderId = '';
-  String customerId = '';
-  String name = '';
-  String email = '';
-  int phoneNumber = 0;
-  bool didStartChatbot = false;
-  bool isPaidUser = false;
-  List<String> options = [];
-  List<String> finalCareerOptions = [];
+String orderId = '';
+String customerId = '';
+String name = '';
+String email = '';
+int phoneNumber = 0;
+bool didStartChatbot = false;
+bool isPaidUser = false;
+List<String> options = [];
+List<String> finalCareerOptions = [];
 
 class Question {
   final String question;
@@ -372,6 +372,7 @@ class _ChatScreenState extends State<ChatScreen1> {
       });
     }
   }
+
   Future<void> userInfo() async {
     final response =
         await http.get(Uri.parse('https://pursueit.in:8080/admin/users'));
@@ -382,26 +383,27 @@ class _ChatScreenState extends State<ChatScreen1> {
           paymentInfo = List<Map<String, dynamic>>.from(data['result']);
         });
         final userDetail = data['result'] as Map<String, dynamic>;
-          userId = userDetail['UserID'] ?? '';
-          orderId = userDetail['OrderID'] ?? '';
-          customerId = userDetail['CustomerID'] ?? '';
-          name = userDetail['Name'] ?? '';
-          email = userDetail['Email'] ?? '';
-          phoneNumber = userDetail['PhoneNumber'] ?? 0;
-          didStartChatbot = userDetail['DidStartChatbot'] ?? false;
-          isPaidUser = userDetail['IsPaidUser'] ?? false;
-          options = List<String>.from(userDetail['Options'] ?? []);
-          finalCareerOptions = List<String>.from(userDetail['FinalCareerOptions'] ?? []);
-          print('User ID: $userId');
-          print('Order ID: $orderId');
-          print('Customer ID: $customerId');
-          print('Name: $name');
-          print('Email: $email');
-          print('Phone Number: $phoneNumber');
-          print('Did Start Chatbot: $didStartChatbot');
-          print('Is Paid User: $isPaidUser');
-          print('Options: $options');
-          print('Final Career Options: $finalCareerOptions');
+        userId = userDetail['UserID'] ?? '';
+        orderId = userDetail['OrderID'] ?? '';
+        customerId = userDetail['CustomerID'] ?? '';
+        name = userDetail['Name'] ?? '';
+        email = userDetail['Email'] ?? '';
+        phoneNumber = userDetail['PhoneNumber'] ?? 0;
+        didStartChatbot = userDetail['DidStartChatbot'] ?? false;
+        isPaidUser = userDetail['IsPaidUser'] ?? false;
+        options = List<String>.from(userDetail['Options'] ?? []);
+        finalCareerOptions =
+            List<String>.from(userDetail['FinalCareerOptions'] ?? []);
+        print('User ID: $userId');
+        print('Order ID: $orderId');
+        print('Customer ID: $customerId');
+        print('Name: $name');
+        print('Email: $email');
+        print('Phone Number: $phoneNumber');
+        print('Did Start Chatbot: $didStartChatbot');
+        print('Is Paid User: $isPaidUser');
+        print('Options: $options');
+        print('Final Career Options: $finalCareerOptions');
       }
     } else {
       throw Exception('Failed to load payment info');
@@ -577,68 +579,68 @@ class _ChatScreenState extends State<ChatScreen1> {
     );
   }
 
- Widget _buildOptions(String optionsString) {
-  List<String> options = optionsString.split(',');
-  bool shouldShowReadMore = options.length > 5;
-  List<String> displayOptions = shouldShowReadMore ? options.sublist(0, 5) : options;
-  bool showAllOptions = false;
+  Widget _buildOptions(String optionsString) {
+    List<String> options = optionsString.split(',');
+    bool shouldShowReadMore = options.length > 5;
+    List<String> displayOptions =
+        shouldShowReadMore ? options.sublist(0, 5) : options;
+    bool showAllOptions = false;
 
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 2),
-    child: Container(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFFBFDCFF)),
-        color: Color(0xFFEAF2FD),
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (var i = 0; i < displayOptions.length; i++)
-            TextButton(
-              onPressed: () {
-                _handleOptionSelected(displayOptions[i]);
-              },
-              child: Center(
-                child: Text(displayOptions[i],
-                    style: GoogleFonts.raleway(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500)),
-              ),
-            ),
-          if (shouldShowReadMore)
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  showAllOptions = !showAllOptions;
-                });
-              },
-              child: Text(showAllOptions ? 'Show Less' : 'Load More'),
-            ),
-          if (showAllOptions)
-            for (var i = 5; i < options.length; i++)
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 2),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(color: Color(0xFFBFDCFF)),
+          color: Color(0xFFEAF2FD),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var i = 0; i < displayOptions.length; i++)
               TextButton(
                 onPressed: () {
-                  _handleOptionSelected(options[i]);
+                  _handleOptionSelected(displayOptions[i]);
                 },
                 child: Center(
-                  child: Text(options[i],
+                  child: Text(displayOptions[i],
                       style: GoogleFonts.raleway(
                           fontSize: 16,
                           color: Colors.black,
                           fontWeight: FontWeight.w500)),
                 ),
               ),
-        ],
+            if (shouldShowReadMore)
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    showAllOptions = !showAllOptions;
+                  });
+                },
+                child: Text(showAllOptions ? 'Show Less' : 'Load More'),
+              ),
+            if (showAllOptions)
+              for (var i = 5; i < options.length; i++)
+                TextButton(
+                  onPressed: () {
+                    _handleOptionSelected(options[i]);
+                  },
+                  child: Center(
+                    child: Text(options[i],
+                        style: GoogleFonts.raleway(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500)),
+                  ),
+                ),
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildTypingIndicator() {
     return Container(

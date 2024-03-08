@@ -1,6 +1,5 @@
-// ignore_for_file: prefer_const_constructors
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:pursue/common_widgets/apptoast.dart';
 import 'package:pursue/common_widgets/common_logo.dart';
@@ -16,6 +15,8 @@ class ForgetPassword extends StatefulWidget {
 class _ForgetPasswordState extends State<ForgetPassword> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
+  bool _isLoading = false; // Add a variable to track loading state
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,40 +59,51 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       keyboardType: TextInputType.emailAddress,
                       controller: emailController,
                       decoration: InputDecoration(
-                          hintText: "Enter Your Email",
-                          hintStyle: TextStyle(color: Color(0xFF9FAFBC)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF2F80ED)),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)))),
+                        hintText: "Enter Your Email",
+                        hintStyle: TextStyle(color: Color(0xFF9FAFBC)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF2F80ED)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
+              SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                child: RoundedButton(
-                    title: "Submit",
-                    onTap: () {
-                      auth
-                          .sendPasswordResetEmail(
-                              email: emailController.text.toString())
-                          .then((value) {
-                        AppToast().toastMessage(
-                          "We have sent you an Email containing a password-reset link. Please check your Email.",
-                        );
-                        Get.back();
-                      }).onError((error, stackTrace) {
-                        AppToast().toastMessage(error.toString());
-                      });
-                    }),
-              )
+                child: _isLoading
+                    ? CircularProgressIndicator() // Show circular progress indicator if loading
+                    : RoundedButton(
+                        title: "Submit",
+                        onTap: () {
+                          setState(() {
+                            _isLoading =
+                                true; // Set loading state to true when submitting
+                          });
+                          auth
+                              .sendPasswordResetEmail(
+                                  email: emailController.text.toString())
+                              .then((value) {
+                            AppToast().toastMessage(
+                              "We have sent you an Email containing a password-reset link. Please check your Email.",
+                            );
+                            Get.back();
+                          }).catchError((error) {
+                            AppToast().toastMessage(error.toString());
+                          }).whenComplete(() {
+                            setState(() {
+                              _isLoading =
+                                  false; // Set loading state to false when complete
+                            });
+                          });
+                        },
+                      ),
+              ),
             ],
           ),
         ),

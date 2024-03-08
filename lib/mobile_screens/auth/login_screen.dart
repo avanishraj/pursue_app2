@@ -1,5 +1,3 @@
-// ignore_for_file: prefer__ructors, prefer__literals_to_create_immutables, prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,7 +16,7 @@ import 'package:http/http.dart' as http;
 import 'package:pursue/mobile_screens/auth/sign_up_with_emailandpass.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -27,11 +25,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   MixpanelService mixpanelService = MixpanelService();
   final Uri url = Uri.parse('https://flutter.dev');
+  bool _isLoading = false;
 
   Future openLink() async {
     const url = 'https://pursueit.in/privacypolicy/';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+    if (await canLaunch(url)) {
+      await launch(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -171,6 +170,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> signInWithGoogle() async {
     try {
+      setState(() {
+        _isLoading = true; // Show CPI while signing in
+      });
+
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser != null) {
         final GoogleSignInAuthentication googleAuth =
@@ -204,8 +207,13 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e) {
-      AppToast().toastMessage("Error signing in with Google! please try after some time or try signing up");
+      AppToast().toastMessage(
+          "Error signing in with Google! please try after some time or try signing up");
       debugPrint('Error signing in with Google: $e');
+    } finally {
+      setState(() {
+        _isLoading = false; // Hide CPI when sign-in process is complete
+      });
     }
   }
 
@@ -215,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Map<String, dynamic> userData = {
       'UserID': id,
       'OrderID': "__",
-      'CustomerID': "CID$id",   
+      'CustomerID': "CID$id",
       'Name': name,
       'Email': email,
       'PhoneNumber': 0,

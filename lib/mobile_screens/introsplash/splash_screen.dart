@@ -19,19 +19,19 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   MixpanelService mixpanelService = MixpanelService();
   FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
-    mixpanelService.sendEventToMixpanel("App_Open", "app is opened");
-    if (auth.currentUser != null) {
-      Timer(Duration(seconds: 3), () {
-        Get.to(() => ChatScreen1());
-      });
-    } else {
-      Timer(Duration(seconds: 3), () {
-        Get.to(() => Intro1Screen());
-      });
-    }
+    // if (auth.currentUser != null) {
+    //   Timer(Duration(seconds: 3), () {
+    //     Get.to(() => ChatScreen1());
+    //   });
+    // } else {
+    Timer(Duration(seconds: 3), () {
+      Get.to(() => Intro1Screen(), transition: Transition.rightToLeft);
+    });
+    // }
   }
 
 

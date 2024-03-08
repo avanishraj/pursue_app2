@@ -8,16 +8,15 @@ class PaymentDetails {
   final List<String> careerSuggesed;
   bool isUserPaid;
 
-  PaymentDetails({
-    required this.userName,
-    required this.customerID,
-    required this.orderID,
-    required this.userEmail,
-    required this.timestamp,
-    required this.tappedOptions,
-    required this.careerSuggesed,
-    required this.isUserPaid
-  });
+  PaymentDetails(
+      {required this.userName,
+      required this.customerID,
+      required this.orderID,
+      required this.userEmail,
+      required this.timestamp,
+      required this.tappedOptions,
+      required this.careerSuggesed,
+      required this.isUserPaid});
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,4 +31,3 @@ class PaymentDetails {
     };
   }
 }
-
